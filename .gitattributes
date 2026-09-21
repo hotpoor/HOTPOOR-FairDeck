@@ -1,0 +1,12 @@
+* text=auto
+*.py text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.sql text eol=lf
+*.cs text eol=lf
+*.asset -whitespace
+*.unity -whitespace
+*.mat -whitespace
+*.meta -whitespace

@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://blockchain.xialiwei.com; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'">
+<title>HOTPOOR FairDeck · 浏览器</title><link rel="stylesheet" href="style.css"></head>
+<body><main><header><span>HOTPOOR / FAIRDECK</span><h1>查看节点与公开记录</h1><p>本地浏览器直接查询线上服务。当前为开发原型，尚未提供链上共识验证。</p></header>
+<section><h2>服务状态</h2><p id="status" role="status">正在连接…</p><button id="refresh">刷新状态与节点</button></section>
+<section><h2>公开节点</h2><p>仅显示主动公开且租约有效的节点。登记信息不等于已经验证可达。</p><ul id="nodes"></ul></section>
+<section><h2>查询公开记录</h2><form id="lookup"><label for="block">32 位 UUID（不含连字符）</label><input id="block" required pattern="[0-9a-f]{32}" maxlength="32" autocomplete="off"><button>查询</button></form><pre id="result" aria-live="polite">请输入记录编号。</pre></section>
+<footer>Play together. Verify for yourself. · 此页面不接收钱包文件或密码。</footer></main><script type="module" src="app.js"></script></body></html>

@@ -1,0 +1,18 @@
+{
+  "domain": "blockchain.xialiwei.com",
+  "bind": "127.0.0.1",
+  "ports": [8811, 8812],
+  "index_dsn_env": "FAIRDECK_INDEX_DSN",
+  "shard_dsn_env": {"1": "FAIRDECK_SHARD1_DSN", "2": "FAIRDECK_SHARD2_DSN"},
+  "admin_token_env": "FAIRDECK_ADMIN_TOKEN",
+  "allowed_origins": ["https://hotpoor.github.io"],
+  "allow_private_nodes": false,
+  "trust_loopback_proxy": false,
+  "storage": {
+    "driver": "qiniu",
+    "bucket": "",
+    "download_base": "https://YOUR-PRIVATE-BUCKET-DOMAIN",
+    "access_key_env": "QINIU_ACCESS_KEY",
+    "secret_key_env": "QINIU_SECRET_KEY"
+  }
+}
