@@ -16,6 +16,7 @@ Copy-Item server/config.example.json server/config.local.json
 | FAIRDECK_SHARD1_DSN / FAIRDECK_SHARD2_DSN | 实体分库连接串 |
 | FAIRDECK_ADMIN_TOKEN | 高熵本地 operator 令牌 |
 | QINIU_ACCESS_KEY / QINIU_SECRET_KEY | 服务端七牛凭据 |
+| FAIRDECK_ARCHIVE_KEY | 32 字节随机密钥的 Base64，用于 AES-GCM 归档封装，必须独立备份 |
 
 在 config.local.json 填私有桶 bucket 和 HTTPS download_base。没有云配置时，可测试 `storage: {"driver":"local","directory":"server/.local/objects"}`，它不代表云归档完成。
 
@@ -54,6 +55,10 @@ owner 必须是已登记钱包。OpenResty Lua 阻止 operator 从外部访问�
 4. 只有本机可信反代才设置 trust_loopback_proxy=true，反代覆盖 X-Real-IP。
 
 模板提供 Lua 访问控制、双上游、大小与速率限制，尚未在目标机器验证。生产凭据仅放服务端，不能打包进客户端或 Pages。
+
+当前线上部署与实际验证见 [部署记录](../Docs/DEPLOYMENT.md)。原始模板用于直接终止 TLS 的 OpenResty；现有主机使用 host-nginx.conf → OpenResty → 双 API，避免替换现有站点网关。
+
+七牛对象一律使用 AES-256-GCM 额外封装，再上传。即使复用公开桶，匿名读取也只有密文；密钥缺失或错误则拒绝解密。该层是服务端归档保护，不能代替游戏的端到端加密。服务端仍有能力解开这一层。
 
 ## 测试与运维边界
 

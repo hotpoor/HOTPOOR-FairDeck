@@ -29,6 +29,15 @@ def identity():
 
 
 class ProtocolTests(unittest.TestCase):
+    def test_archive_envelope_authentication(self):
+        os.environ["FAIRDECK_TEST_ARCHIVE_KEY"] = base64.b64encode(secrets.token_bytes(32)).decode()
+        cloud = Cloud({"archive_key_env": "FAIRDECK_TEST_ARCHIVE_KEY"})
+        encrypted = cloud.seal("object-a", b'private content')
+        self.assertNotIn(b'private content', encrypted)
+        self.assertEqual(cloud.unseal("object-a", encrypted), b'private content')
+        with self.assertRaises(Exception): cloud.unseal("object-b", encrypted)
+        with self.assertRaises(Exception): cloud.unseal("object-a", encrypted[:-1] + bytes([encrypted[-1] ^ 1]))
+
     def test_shards_and_validation(self):
         self.assertEqual(shard("0" * 32), 1)
         self.assertEqual(shard("f" * 32), 2)

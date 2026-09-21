@@ -1,0 +1,12 @@
+**/.local
+**/.secrets
+**/__pycache__
+**/wallet
+**/wallets
+**/*.token
+**/*.key
+**/*.pem
+**/config.local.json
+.git
+apps
+Docs

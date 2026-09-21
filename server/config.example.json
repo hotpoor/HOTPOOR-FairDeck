@@ -13,6 +13,7 @@
     "bucket": "",
     "download_base": "https://YOUR-PRIVATE-BUCKET-DOMAIN",
     "access_key_env": "QINIU_ACCESS_KEY",
-    "secret_key_env": "QINIU_SECRET_KEY"
+    "secret_key_env": "QINIU_SECRET_KEY",
+    "archive_key_env": "FAIRDECK_ARCHIVE_KEY"
   }
 }
