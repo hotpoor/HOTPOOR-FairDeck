@@ -18,27 +18,33 @@ namespace FairDeck {
         string password = "", confirmation = "", status = "请创建钱包，或选择一个已有钱包。";
         string directory; string activeAddress, sessionToken; DateTime expires;
         ApiConfig config; bool busy; Vector2 scroll;
+        public bool IsOpen { get; private set; }
+        public void OpenPanel() { IsOpen=true; }
+        public void ClosePanel() { if(busy) return; password=confirmation=""; IsOpen=false; }
         void Start() {
             directory = LocalWallet.DirectoryPath;
             var asset = Resources.Load<TextAsset>("client-config");
             config = asset ? JsonUtility.FromJson<ApiConfig>(asset.text) : new ApiConfig();
-            RefreshFiles();
+            try { RefreshFiles(); } catch(Exception) { status="钱包目录不可访问，请检查游戏目录权限。"; }
         }
         void RefreshFiles() {
             Directory.CreateDirectory(directory); files = Directory.GetFiles(directory, "*.json");
             Array.Sort(files); if (selected >= files.Length) selected = -1;
         }
         void OnGUI() {
+            if (!IsOpen) return;
             GUI.skin.label.fontSize = 17; GUI.skin.button.fontSize = 16;
-            float width = Mathf.Min(620, Screen.width - 30);
-            GUILayout.BeginArea(new Rect(20, 20, width, Screen.height - 40), GUI.skin.box);
-            GUILayout.Label("HOTPOOR FairDeck · 桌前准备");
-            GUILayout.Label("本地钱包 / 在线身份验证原型");
-            GUILayout.Label("节点服务：" + config?.apiBase);
+            float width = Mathf.Min(540, Screen.width - 30);
+            GUILayout.BeginArea(new Rect(Screen.width-width-24, 24, width, Screen.height - 48), GUI.skin.box);
+            GUILayout.Label("你的钱包 · 你的牌桌身份");
+            GUI.enabled=!busy;
+            if(GUILayout.Button("放回桌面 · Esc")) ClosePanel();
+            GUI.enabled=true;
             GUILayout.Space(12);
             if (sessionToken != null && DateTime.UtcNow >= expires) { sessionToken = null; activeAddress = null; status = "会话已过期，请重新验证。"; }
             GUI.enabled = !busy && sessionToken == null;
             scroll = GUILayout.BeginScrollView(scroll, GUILayout.Height(135));
+            if(files.Length==0) GUILayout.Label("桌上还没有钱包。\n在下方设置密码，创建你的第一个钱包。");
             for (int i = 0; i < files.Length; i++) {
                 string name = Path.GetFileNameWithoutExtension(files[i]);
                 if (GUILayout.Toggle(selected == i, name, GUI.skin.button)) selected = i;
@@ -49,7 +55,7 @@ namespace FairDeck {
             GUILayout.Label("创建时再次输入密码");
             confirmation = GUILayout.PasswordField(confirmation, '*', 256);
             if (GUILayout.Button("创建新钱包")) Create();
-            if (GUILayout.Button("刷新钱包列表")) RefreshFiles();
+            if (GUILayout.Button("刷新钱包列表")) { try { RefreshFiles(); } catch(Exception) { status="无法读取钱包目录。"; } }
             GUI.enabled = !busy && sessionToken == null && selected >= 0;
             if (GUILayout.Button("使用所选钱包并在线验证")) StartCoroutine(Login());
             GUI.enabled = !busy;
