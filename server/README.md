@@ -50,7 +50,7 @@ owner 必须是已登记钱包。OpenResty Lua 阻止 operator 从外部访问�
 
 1. DNS A/AAAA 指向确定的服务器，申请 blockchain.xialiwei.com TLS 证书。
 2. 调整 `openresty/nginx.conf` 端口与证书路径，执行 `openresty -t` 后加载。
-3. CORS 允许来源为 `https://hotpoor.github.io`，来源不含路径。
+3. CORS 允许来源为 `https://hotpoor.github.io` 和账号现有 Pages 域名 `https://github.xialiwei.com`，来源不含路径。页面须使用 HTTPS。
 4. 只有本机可信反代才设置 trust_loopback_proxy=true，反代覆盖 X-Real-IP。
 
 模板提供 Lua 访问控制、双上游、大小与速率限制，尚未在目标机器验证。生产凭据仅放服务端，不能打包进客户端或 Pages。
